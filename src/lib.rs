@@ -1,2 +1,1 @@
 mod bst;
-mod list;
