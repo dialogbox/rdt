@@ -2,31 +2,42 @@
 struct Data(u64, String);
 
 #[derive(Debug)]
-struct BST<K, V> {
-    root: NodeEntry<K, V>
+enum BST<T> {
+    Teminal,
+    Node(Box<TreeNode<T>>)
 }
 
 #[derive(Debug)]
-enum NodeEntry<K, V> {
-    Node(K, V, Box<NodeEntry<K, V>>, Box<NodeEntry<K, V>>),
-    Terminal,
+struct TreeNode<T> {
+    v: T,
+    l: BST<T>,
+    r: BST<T>
 }
 
-impl <K, V> BST<K, V> where K: PartialOrd {
-    pub fn new() -> BST<K, V> {
-        BST::<K, V> { root: NodeEntry::Terminal }
+impl <T: Ord> BST<T> {
+    fn add(&mut self, value: T) {
+        match *self {
+            BST::Teminal =>
+                *self = BST::Node(Box::new(TreeNode {
+                    v: value,
+                    l: BST::Teminal,
+                    r: BST::Teminal,
+                })),
+            BST::Node(ref mut node) =>
+                if value <= node.v {
+                    node.l.add(value);
+                } else {
+                    node.r.add(value);
+                }
+        }
     }
 
-    pub fn add(&mut self, k: K, v: V) {
-        self.root = NodeEntry::Node(k, v, Box::new(NodeEntry::Terminal), Box::new(NodeEntry::Terminal));
-    }
-
-    fn try_search<'a>(cur: &'a NodeEntry<K, V>, k: K) -> &'a NodeEntry<K, V> {
-        match cur {
-            NodeEntry::Terminal => &cur,
-            NodeEntry::Node(ref ck, _, _, _) if *ck == k => &cur,
-            NodeEntry::Node(ref ck, _, ref l, _) if *ck < k => BST::try_search(l, k),
-            NodeEntry::Node(_, _, _, ref r) => BST::try_search(r, k),
+    fn get(&mut self, value: T) -> Option<&mut TreeNode<T>> {
+        match *self {
+            BST::Teminal => Option::None,
+            BST::Node(ref mut node) if value == node.v => Option::Some(node),
+            BST::Node(ref mut node) if value > node.v => node.r.get(value),
+            BST::Node(ref mut node) => node.l.get(value),
         }
     }
 }
@@ -47,10 +58,20 @@ mod test {
 
         println!("{:?}", movie_reviews);
 
-        let mut bst = BST::<&str, Data>::new();
+        let mut bst = BST::Teminal;
 
-        bst.add("Office Space", Data(10, "Deals with real issues in the workplace.".to_string()));
+        bst.add("Office Space");
+        bst.add("Pulp Fiction");
+        bst.add("The Godfather");
+        bst.add("The Blues Brothers");
+
+        println!("{:?}", bst.get("Pulp Fiction"));
+
+        if let Option::Some(ref mut node) = bst.get("Pulp Fiction") {
+            node.v = "Pulp Fiction2";
+        }
 
         println!("{:?}", bst);
+
     }
 }
