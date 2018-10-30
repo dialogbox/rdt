@@ -1,7 +1,4 @@
 #[derive(Debug)]
-struct Data(u64, String);
-
-#[derive(Debug)]
 enum BST<T> {
     Teminal,
     Node(Box<TreeNode<T>>)
@@ -45,19 +42,9 @@ impl <T: Ord> BST<T> {
 #[cfg(test)]
 mod test {
     use super::*;
-    use std::collections::BTreeMap;
 
     #[test]
     fn new_tree() {
-        let mut movie_reviews = BTreeMap::new();
-
-        movie_reviews.insert("Office Space", Data(10, "Deals with real issues in the workplace.".to_string()));
-        movie_reviews.insert("Pulp Fiction", Data(2, "Masterpiece.".to_string()));
-        movie_reviews.insert("The Godfather", Data(1, "Very enjoyable..".to_string()));
-        movie_reviews.insert("The Blues Brothers", Data(99, "Eye lyked it alot.".to_string()));
-
-        println!("{:?}", movie_reviews);
-
         let mut bst = BST::Teminal;
 
         bst.add("Office Space");
@@ -72,6 +59,5 @@ mod test {
         }
 
         println!("{:?}", bst);
-
     }
 }
