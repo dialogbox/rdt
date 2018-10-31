@@ -73,6 +73,15 @@ mod test {
     fn tree_delete() {
         let mut bst = BST::Teminal;
 
+        //       10
+        //      /  \
+        //     6   11
+        //    /
+        //   4
+        //  / \
+        // 2   5
+        //  \
+        //   3
         bst.add(10);
         bst.add(11);
         bst.add(6);
