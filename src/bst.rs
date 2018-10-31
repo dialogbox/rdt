@@ -37,6 +37,10 @@ impl <T: Ord> BST<T> {
             BST::Node(ref mut node) => node.l.get(value),
         }
     }
+
+    fn delete(&mut self, value: T) {
+        panic!("Not implemented!");
+    }
 }
 
 #[cfg(test)]
@@ -52,12 +56,41 @@ mod test {
         bst.add("The Godfather");
         bst.add("The Blues Brothers");
 
-        println!("{:?}", bst.get("Pulp Fiction"));
+        assert_eq!(bst.get("Office Space").unwrap().v, "Office Space");
+        assert_eq!(bst.get("Pulp Fiction").unwrap().v, "Pulp Fiction");
+        assert_eq!(bst.get("The Godfather").unwrap().v, "The Godfather");
+        assert_eq!(bst.get("The Blues Brothers").unwrap().v, "The Blues Brothers");
 
         if let Option::Some(ref mut node) = bst.get("Pulp Fiction") {
             node.v = "Pulp Fiction2";
         }
 
-        println!("{:?}", bst);
+        assert_eq!(bst.get("Pulp Fiction").is_none(), true);
+        assert_eq!(bst.get("Pulp Fiction2").unwrap().v, "Pulp Fiction2");
+    }
+
+    #[test]
+    fn tree_delete() {
+        let mut bst = BST::Teminal;
+
+        bst.add(10);
+        bst.add(11);
+        bst.add(6);
+        bst.add(4);
+        bst.add(2);
+        bst.add(3);
+        bst.add(5);
+
+        assert_eq!(bst.get(10).unwrap().v, 10);
+        assert_eq!(bst.get(11).unwrap().v, 11);
+        assert_eq!(bst.get(6).unwrap().v,  6);
+        assert_eq!(bst.get(4).unwrap().v,  4);
+        assert_eq!(bst.get(2).unwrap().v,  2);
+        assert_eq!(bst.get(3).unwrap().v,  3);
+        assert_eq!(bst.get(5).unwrap().v,  5);
+
+        bst.delete(4);
+
+        assert_eq!(bst.get(4).is_none(), true);
     }
 }
