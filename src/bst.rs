@@ -32,15 +32,25 @@ impl <T: Ord> BST<T> {
     fn get(&mut self, value: T) -> Option<&mut TreeNode<T>> {
         match *self {
             BST::Teminal => Option::None,
-            BST::Node(ref mut node) if value == node.v => Option::Some(node),
             BST::Node(ref mut node) if value > node.v => node.r.get(value),
-            BST::Node(ref mut node) => node.l.get(value),
+            BST::Node(ref mut node) if value < node.v => node.l.get(value),
+            BST::Node(ref mut node) => Option::Some(node),
         }
     }
 
     fn delete(&mut self, value: T) {
-        panic!("Not implemented!");
+        match *self {
+            BST::Teminal => (),
+            BST::Node(ref mut node) if value > node.v => node.r.delete(value),
+            BST::Node(ref mut node) if value < node.v => node.l.delete(value),
+            BST::Node(ref mut node) => {
+
+                // TODO
+                // 자식 노드의 상태에 따라 한쪽 값을 위로 올려서 현재 노드의 값을 삭제한다.
+            },
+        }
     }
+
 }
 
 #[cfg(test)]
