@@ -38,15 +38,29 @@ impl <T: Ord> BST<T> {
         }
     }
 
-    fn delete(&mut self, value: T) {
-        match *self {
-            BST::Teminal => (),
-            BST::Node(ref mut node) if value > node.v => node.r.delete(value),
-            BST::Node(ref mut node) if value < node.v => node.l.delete(value),
-            BST::Node(ref mut node) => {
+    // deletion entry point
+    fn delete(self, value: T) -> BST<T> {
+        match self {
+            BST::Teminal => self,
+            BST::Node(node) => {
+                if value > node.v {
+                    node.r.delete(value)
+                } else if value < node.v {
+                    node.l.delete(value)
+                } else {
+                    let node = *node;
+                    let TreeNode { v: _, l, r } = node;
 
-                // TODO
-                // 자식 노드의 상태에 따라 한쪽 값을 위로 올려서 현재 노드의 값을 삭제한다.
+                    match (l, r) {
+                        (BST::Teminal, BST::Teminal) => BST::Teminal,
+                        (BST::Node(node), BST::Teminal) => BST::Node(node),
+                        (BST::Teminal, BST::Node(node)) => BST::Node(node),
+                        (BST::Node(lnode), BST::Node(rnode)) => {
+                            panic!("Not implemented!");
+                        },
+                    }
+
+                }
             },
         }
     }
@@ -108,8 +122,18 @@ mod test {
         assert_eq!(bst.get(3).unwrap().v,  3);
         assert_eq!(bst.get(5).unwrap().v,  5);
 
-        bst.delete(4);
+        bst = bst.delete(3);
+        bst = bst.delete(11);
+        bst = bst.delete(6);
+
+        assert_eq!(bst.get(3).is_none(), true);
+        assert_eq!(bst.get(11).is_none(), true);
+        assert_eq!(bst.get(6).is_none(), true);
+
+        bst = bst.delete(4);
 
         assert_eq!(bst.get(4).is_none(), true);
+
+        println!("{:#?}", bst);
     }
 }
