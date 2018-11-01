@@ -1,17 +1,17 @@
 #[derive(Debug)]
 enum BST<T> {
     Teminal,
-    Node(Box<TreeNode<T>>)
+    Node(Box<TreeNode<T>>),
 }
 
 #[derive(Debug)]
 struct TreeNode<T> {
     v: T,
     l: BST<T>,
-    r: BST<T>
+    r: BST<T>,
 }
 
-impl <T: Ord> BST<T> {
+impl<T: Ord> BST<T> {
     fn add(&mut self, value: T) {
         match *self {
             BST::Teminal =>
@@ -55,17 +55,12 @@ impl <T: Ord> BST<T> {
                 let TreeNode { v, l, r } = node;
 
                 match (r, l) {
-                    (BST::Teminal, BST::Teminal) => {
-                        (BST::Teminal, Option::Some(v))
-                    },
-                    (r @ BST::Node(_), BST::Teminal) => {
-                        (r, Option::Some(v))
-                    },
+                    (BST::Teminal, BST::Teminal) => (BST::Teminal, Option::Some(v)),
+                    (r @ BST::Node(_), BST::Teminal) => (r, Option::Some(v)),
                     (r @ _, l @ BST::Node(_)) => {
                         let (l, minv) = l.pop_min();
-
-                        (BST::Node(Box::new(TreeNode{ v, l, r })), minv)
-                    },
+                        (BST::Node(Box::new(TreeNode { v, l, r })), minv)
+                    }
                 }
             }
         }
@@ -79,17 +74,12 @@ impl <T: Ord> BST<T> {
                 let TreeNode { v, l, r } = node;
 
                 match (l, r) {
-                    (BST::Teminal, BST::Teminal) => {
-                        (BST::Teminal, Option::Some(v))
-                    },
-                    (l @ BST::Node(_), BST::Teminal) => {
-                        (l, Option::Some(v))
-                    },
+                    (BST::Teminal, BST::Teminal) => (BST::Teminal, Option::Some(v)),
+                    (l @ BST::Node(_), BST::Teminal) => (l, Option::Some(v)),
                     (l @ _, r @ BST::Node(_)) => {
                         let (r, maxv) = r.pop_max();
-
-                        (BST::Node(Box::new(TreeNode{ v, l, r })), maxv)
-                    },
+                        (BST::Node(Box::new(TreeNode { v, l, r })), maxv)
+                    }
                 }
             }
         }
@@ -107,12 +97,12 @@ impl <T: Ord> BST<T> {
                     let TreeNode { v, l, r } = node;
 
                     let r = r.delete(value);
-                    BST::Node(Box::new(TreeNode{v, l, r}))
+                    BST::Node(Box::new(TreeNode { v, l, r }))
                 } else if value < node.v {
                     let node = *node;
                     let TreeNode { v, l, r } = node;
                     let l = l.delete(value);
-                    BST::Node(Box::new(TreeNode{v, l, r}))
+                    BST::Node(Box::new(TreeNode { v, l, r }))
                 } else {
                     // https://en.wikipedia.org/wiki/Binary_search_tree#Deletion
                     // T. Hibbard in 1962
@@ -126,15 +116,12 @@ impl <T: Ord> BST<T> {
                         (l @ BST::Node(_), r @ BST::Node(_)) => {
                             let (l, maxl) = l.pop_max();
                             BST::Node(Box::new(TreeNode { v: maxl.unwrap(), l, r }))
-                        },
+                        }
                     }
                 }
-            },
+            }
         }
     }
-
-
-
 }
 
 #[cfg(test)]
@@ -280,11 +267,11 @@ mod test {
 
         assert_eq!(bst.get(10).unwrap().v, 10);
         assert_eq!(bst.get(11).unwrap().v, 11);
-        assert_eq!(bst.get(6).unwrap().v,  6);
-        assert_eq!(bst.get(4).unwrap().v,  4);
-        assert_eq!(bst.get(2).unwrap().v,  2);
-        assert_eq!(bst.get(3).unwrap().v,  3);
-        assert_eq!(bst.get(5).unwrap().v,  5);
+        assert_eq!(bst.get(6).unwrap().v, 6);
+        assert_eq!(bst.get(4).unwrap().v, 4);
+        assert_eq!(bst.get(2).unwrap().v, 2);
+        assert_eq!(bst.get(3).unwrap().v, 3);
+        assert_eq!(bst.get(5).unwrap().v, 5);
 
         bst = bst.delete(3);
         bst = bst.delete(11);
