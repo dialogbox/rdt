@@ -29,11 +29,20 @@ impl <T: Ord> BST<T> {
         }
     }
 
-    fn get(&mut self, value: T) -> Option<&mut TreeNode<T>> {
+    fn get(&self, value: T) -> Option<&TreeNode<T>> {
         match *self {
             BST::Teminal => Option::None,
-            BST::Node(ref mut node) if value > node.v => node.r.get(value),
-            BST::Node(ref mut node) if value < node.v => node.l.get(value),
+            BST::Node(ref node) if value > node.v => node.r.get(value),
+            BST::Node(ref node) if value < node.v => node.l.get(value),
+            BST::Node(ref node) => Option::Some(node),
+        }
+    }
+
+    fn get_mut(&mut self, value: T) -> Option<&mut TreeNode<T>> {
+        match *self {
+            BST::Teminal => Option::None,
+            BST::Node(ref mut node) if value > node.v => node.r.get_mut(value),
+            BST::Node(ref mut node) if value < node.v => node.l.get_mut(value),
             BST::Node(ref mut node) => Option::Some(node),
         }
     }
@@ -154,7 +163,7 @@ mod test {
         assert_eq!(bst.get("The Godfather").unwrap().v, "The Godfather");
         assert_eq!(bst.get("The Blues Brothers").unwrap().v, "The Blues Brothers");
 
-        if let Option::Some(ref mut node) = bst.get("Pulp Fiction") {
+        if let Option::Some(ref mut node) = bst.get_mut("Pulp Fiction") {
             node.v = "Pulp Fiction2";
         }
 
