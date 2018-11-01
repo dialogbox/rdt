@@ -125,15 +125,7 @@ impl <T: Ord> BST<T> {
                         (BST::Teminal, r @ BST::Node(_)) => r,
                         (l @ BST::Node(_), r @ BST::Node(_)) => {
                             let (l, maxl) = l.pop_max();
-                            match maxl {
-                                Option::None => {
-                                    let (r, minr) = r.pop_min();
-                                    BST::Node(Box::new(TreeNode { v: minr.unwrap(), l, r }))
-                                },
-                                Option::Some(maxl) => {
-                                    BST::Node(Box::new(TreeNode { v: maxl, l, r }))
-                                }
-                            }
+                            BST::Node(Box::new(TreeNode { v: maxl.unwrap(), l, r }))
                         },
                     }
                 }
