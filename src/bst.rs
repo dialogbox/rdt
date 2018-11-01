@@ -316,9 +316,31 @@ mod test {
         bst.add(3);
         bst.add(5);
 
+        //     6
+        //    / \
+        //   4   11
+        //  / \
+        // 2   5
+        //  \
+        //   3
         bst = bst.delete(10);
-
         assert_eq!(bst.get(10).is_none(), true);
+
+        //     6
+        //    / \
+        //   3   11
+        //  / \
+        // 2   5
+        bst = bst.delete(4);
+        assert_eq!(bst.get(4).is_none(), true);
+
+        //     6
+        //    / \
+        //   2   11
+        //    \
+        //     5
+        bst = bst.delete(3);
+        assert_eq!(bst.get(3).is_none(), true);
 
         println!("{:#?}", bst);
     }
