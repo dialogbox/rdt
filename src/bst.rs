@@ -329,7 +329,19 @@ mod test {
         //     5
         bst = bst.delete(3);
         assert_eq!(bst.get(3).is_none(), true);
+    }
 
-        println!("{:#?}", bst);
+    #[test]
+    fn test_delete_the_only_node() {
+        let mut bst = BST::Teminal;
+        bst.add(10);
+        bst = bst.delete(10);
+
+        assert_eq!(bst.get(10).is_none(), true);
+
+        match bst {
+            BST::Node(_) => panic!("BST should be empty"),
+            _ => ()
+        }
     }
 }
