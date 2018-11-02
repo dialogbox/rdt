@@ -1,18 +1,18 @@
 #[derive(Debug)]
-enum BST<T> {
+pub enum BST<T> {
     Teminal,
     Node(Box<TreeNode<T>>),
 }
 
 #[derive(Debug)]
-struct TreeNode<T> {
+pub struct TreeNode<T> {
     v: T,
     l: BST<T>,
     r: BST<T>,
 }
 
 impl<T: Ord> BST<T> {
-    fn add(&mut self, value: T) {
+    pub fn add(&mut self, value: T) {
         match *self {
             BST::Teminal =>
                 *self = BST::Node(Box::new(TreeNode {
@@ -29,7 +29,7 @@ impl<T: Ord> BST<T> {
         }
     }
 
-    fn get(&self, value: T) -> Option<&TreeNode<T>> {
+    pub fn get(&self, value: T) -> Option<&TreeNode<T>> {
         match *self {
             BST::Teminal => Option::None,
             BST::Node(ref node) if value > node.v => node.r.get(value),
@@ -38,7 +38,7 @@ impl<T: Ord> BST<T> {
         }
     }
 
-    fn get_mut(&mut self, value: T) -> Option<&mut TreeNode<T>> {
+    pub fn get_mut(&mut self, value: T) -> Option<&mut TreeNode<T>> {
         match *self {
             BST::Teminal => Option::None,
             BST::Node(ref mut node) if value > node.v => node.r.get_mut(value),
@@ -85,7 +85,7 @@ impl<T: Ord> BST<T> {
         }
     }
 
-    fn delete(self, value: T) -> BST<T> {
+    pub fn delete(self, value: T) -> BST<T> {
         match self {
             BST::Teminal => self,
             BST::Node(node) => {
